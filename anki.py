@@ -32,10 +32,10 @@ def make_card_from_template(template: CardTemplate) -> genanki.Note:
         fields=[template.line, template.translation],
     )
 
-def make_deck_from_template(template: DeckTemplate) -> genanki.Deck:
+def make_deck_from_template(template: DeckTemplate, deck_name: str) -> genanki.Deck:
     """Make an Anki deck from a template."""
     UID_DECK = random.randrange(1 << 30, 1 << 31)
-    deck = genanki.Deck(UID_DECK, "SongDeck")
+    deck = genanki.Deck(UID_DECK, deck_name)
 
     for card in template.cards:
         deck.add_note(

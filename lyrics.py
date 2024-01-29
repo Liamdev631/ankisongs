@@ -18,6 +18,6 @@ def clean_lyrics(lyrics: str) -> list[str]:
                 english_lines.append(line)
         except LangDetectException:
             continue
-        lines = [line for line in lines if line not in english_lines]
+    lines = [line for line in lines if line not in english_lines]
 
-    return "\n".join(lines)
+    return lines
