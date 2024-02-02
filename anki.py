@@ -1,12 +1,12 @@
 from langchain.pydantic_v1 import BaseModel, Field
 import genanki
 import random
-
+import pinyin
 
 class CardTemplate(BaseModel):
     """A template for an Anki card."""
-    line: str = Field(..., description="The line of the song in a non-English language.")
-    translation: str = Field(..., description="The translation of the line in English.")
+    front: str = Field(..., description="The line of the song, or word, in a non-English language.")
+    back: str = Field(..., description="The translation of the line, or word, in English.")
 
 class DeckTemplate(BaseModel):
     cards: list[CardTemplate] = Field(..., description="The cards in the deck, which comprise the entire song.")
@@ -16,20 +16,20 @@ class DeckTemplate(BaseModel):
 UID_MODEL = 1640018922
 card_model = genanki.Model(UID_MODEL, name="LineModel",
     fields=[
-        {"name": "Line"},
-        {"name": "Translation"}
+        {"name": "Front"},
+        {"name": "Back"}
         ],
     templates=[{
         "name": "LineTemplate",
-        "qfmt": "{{Line}}",
-        "afmt": "{{FrontSide}}<hr id=answer>{{Translation}}",
+        "qfmt": "{{Front}}",
+        "afmt": "{{Front}}<hr id=answer>{{Back}}",
         }])
 
 def make_card_from_template(template: CardTemplate) -> genanki.Note:
     """Make an Anki card from a template."""
     return genanki.Note(
         model=card_model,
-        fields=[template.line, template.translation],
+        fields=[template.front, "\n".join([pinyin.get(template.front), template.back])],
     )
 
 def make_deck_from_template(template: DeckTemplate, deck_name: str) -> genanki.Deck:

@@ -7,8 +7,8 @@ def clean_lyrics(lyrics: str) -> list[str]:
     # Remove all empty lines
     lines = [line for line in lines if line != '']
 
-    # Remove all duplicate lines
-    lines = list(set(lines))
+    # Remove all duplicate lines while preserving order
+    lines = list(dict.fromkeys(lines))
 
     # Remove all lines that are prodominantly English
     english_lines = []

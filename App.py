@@ -16,6 +16,9 @@ with col_lyrics:
 with col_cards:
     st.header("Cards 📇")
     st.text_input("Deck Name", key="deck_name")
+
+    # Ask for the desired language level
+    st.selectbox("Language Level", ["HSK 1", "HSK 2", "HSK 3", "HSK 4", "HSK 5", "HSK 6"], key="language_level")
     
     # Generate a deck
     if st.button("Generate Deck"):
@@ -23,7 +26,7 @@ with col_cards:
         lyrics = st.session_state["lyrics"]
 
         # Generate the deck with the LLM
-        deck = generate_deck_from_lyrics(lyrics, deck_name)
+        deck = generate_deck_from_lyrics(lyrics, deck_name, language_level=st.session_state["language_level"])
 
         # Display a list of all the cards
         for note in deck.notes:
